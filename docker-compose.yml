@@ -4,8 +4,6 @@ services:
   db:
     image: mysql:latest
     restart: always
-    volumes:
-      - ./mysql-data:/var/lib/mysql
 
     environment:
       MYSQL_DATABASE: ${DB_NAME}
@@ -17,6 +15,3 @@ services:
       # Opens port 3306 on the container
       - "3306"
       # Where our data will be persisted
-
-volume:
-  mysql-data:

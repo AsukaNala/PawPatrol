@@ -12,7 +12,8 @@ const FoundPet = db.Sequelize.define("FoundPet", {
     allowNull: false,
   },
   type: {
-    type: DataTypes.STRING,
+    type: DataTypes.ENUM,
+    values: ["dog", "cat", "bird", "rabbit", "other"],
     allowNull: false,
   },
   colour: {
@@ -29,7 +30,7 @@ const FoundPet = db.Sequelize.define("FoundPet", {
   },
   photo: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   comment: {
     type: DataTypes.TEXT,
@@ -49,7 +50,7 @@ const FoundPet = db.Sequelize.define("FoundPet", {
   },
   claimedDate: {
     type: DataTypes.DATEONLY,
-    allowNull: false,
+    allowNull: true,
   },
 });
 

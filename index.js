@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const port = 3000;
 
+//Middleware
 app.use(express.json());
 
 //Database
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 
 //Routes
 app.use("/api/users", require("./routes/userRoute"));
+app.use("/api/missing-pets", require("./routes/missingPetRoute"));
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

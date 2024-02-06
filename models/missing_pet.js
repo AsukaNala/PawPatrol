@@ -11,8 +11,13 @@ const MissingPet = db.Sequelize.define("MissingPet", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  type: {
+  name: {
     type: DataTypes.STRING,
+    allowNull: false,
+  },
+  type: {
+    type: DataTypes.ENUM,
+    values: ["dog", "cat", "bird", "rabbit", "other"],
     allowNull: false,
   },
   colour: {
@@ -29,28 +34,26 @@ const MissingPet = db.Sequelize.define("MissingPet", {
   },
   photo: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   comment: {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  // status:{
-  //   type: DataTypes.STRING,
-  //   allowNull: false,
-  //   defaultValue: "missing",
-  //   validate: {
-  //     isIn: [["missing", "found"]],
-  // }
-  // }
-  found: {
-    type: DataTypes.BOOLEAN,
+  status: {
+    type: DataTypes.ENUM,
+    values: ["missing", "found"],
     allowNull: false,
-    defaultValue: false,
+    defaultValue: "missing",
   },
+  // found: {
+  //   type: DataTypes.BOOLEAN,
+  //   allowNull: false,
+  //   defaultValue: false,
+  // },
   foundDate: {
     type: DataTypes.DATEONLY,
-    allowNull: false,
+    allowNull: true,
   },
 });
 
