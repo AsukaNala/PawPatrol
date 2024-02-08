@@ -2,11 +2,13 @@ require("dotenv").config();
 const express = require("express");
 const { engine } = require("express-handlebars");
 const multer = require("multer");
+const cors = require("cors");
 const upload = multer({ dest: "uploads/" });
 const app = express();
 const port = 3000;
 
-//File Upload
+//Cors
+app.use(cors());
 
 //Handlebars
 app.engine("handlebars", engine());
