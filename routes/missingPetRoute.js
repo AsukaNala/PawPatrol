@@ -66,6 +66,165 @@ router.get("/:id", async (req, res, next) => {
 
 /**
  * @swagger
+ * /api/missing-pets/users/{id}:
+ *  get:
+ *    description: Use to request a missing pet by User ID
+ *    tags:
+ *      - Missing Pets
+ *    parameters:
+ *      - name: id
+ *        in: path
+ *        description: ID of user to fetch
+ *        required: true
+ *        type: integer
+ *        minimum: 1
+ *        example: 1
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '404':
+ *        description: User not found
+ *      '422':
+ *        description: Validation error
+ *      '500':
+ *        description: Server error
+ */
+router.get("/users/:id", async (req, res, next) => {
+  try {
+    const data = await MissingPetController.getMissingPetByUserId(
+      req.params.id
+    );
+    if (!data) {
+      return res.status(404).send({ result: 404, message: " Not found" });
+    } else {
+      res.send({ result: 200, data: data });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * @swagger
+ * /api/missing-pets/type/{type}:
+ *  get:
+ *    description: Use to request a missing pet by type
+ *    tags:
+ *      - Missing Pets
+ *    parameters:
+ *      - name: type
+ *        in: path
+ *        description: type of missing pet to fetch
+ *        required: true
+ *        type: string
+ *        example: cat
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '404':
+ *        description: User not found
+ *      '422':
+ *        description: Validation error
+ *      '500':
+ *        description: Server error
+ */
+router.get("/type/:type", async (req, res, next) => {
+  try {
+    const data = await MissingPetController.getMissingPetsByType(
+      req.params.type
+    );
+    if (!data) {
+      return res.status(404).send({ result: 404, message: " Not found" });
+    } else {
+      res.send({ result: 200, data: data });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * @swagger
+ * /api/missing-pets/status/{status}:
+ *  get:
+ *    description: Use to request a missing pet by status
+ *    tags:
+ *      - Missing Pets
+ *    parameters:
+ *      - name: status
+ *        in: path
+ *        description: status of missing pet to fetch
+ *        required: true
+ *        type: string
+ *        minimum: 1
+ *        example: missing
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '404':
+ *        description: User not found
+ *      '422':
+ *        description: Validation error
+ *      '500':
+ *        description: Server error
+ */
+router.get("/status/:status", async (req, res, next) => {
+  try {
+    const data = await MissingPetController.getMissingPetsByStatus(
+      req.params.status
+    );
+    if (!data) {
+      return res.status(404).send({ result: 404, message: " Not found" });
+    } else {
+      res.send({ result: 200, data: data });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * @swagger
+ * /api/missing-pets/location/{lastSeenLocation}:
+ *  get:
+ *    description: Use to request a missing pet by lastSeenLocation
+ *    tags:
+ *      - Missing Pets
+ *    parameters:
+ *      - name: lastSeenLocation
+ *        in: path
+ *        description: location of missing pet last seen to fetch
+ *        required: true
+ *        type: string
+ *        minimum: 1
+ *        example: Fremantle
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '404':
+ *        description: User not found
+ *      '422':
+ *        description: Validation error
+ *      '500':
+ *        description: Server error
+ */
+router.get("/location/:lastSeenLocation", async (req, res, next) => {
+  try {
+    const data = await MissingPetController.getMissingPetsByLastSeenLocation(
+      req.params.lastSeenLocation
+    );
+    if (!data) {
+      return res.status(404).send({ result: 404, message: " Not found" });
+    } else {
+      res.send({ result: 200, data: data });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * @swagger
  * /api/missing-pets:
  *  post:
  *    description: Use to create a new missing pet

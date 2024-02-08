@@ -1,7 +1,21 @@
 require("dotenv").config();
 const express = require("express");
+const { engine } = require("express-handlebars");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 const app = express();
 const port = 3000;
+
+//File Upload
+
+//Handlebars
+app.engine("handlebars", engine());
+app.set("view engine", "handlebars");
+app.set("views", "./views");
+
+app.get("/", (req, res) => {
+  res.render("home");
+});
 
 //Middleware
 app.use(express.json());
@@ -17,10 +31,6 @@ if (process.env.NODE_ENV === "development") {
   const swaggerSpec = require("./swagger/swaggerSpec");
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec.default));
 }
-
-app.get("/", (req, res) => {
-  res.send("Welcome to Pawpatrol");
-});
 
 //Routes
 app.use("/api/users", require("./routes/userRoute"));
