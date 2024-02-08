@@ -36,18 +36,17 @@ const FoundPet = db.Sequelize.define("FoundPet", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  // status:{
-  //   type: DataTypes.STRING,
-  //   allowNull: false,
-  //   defaultValue: "found",
-  //   validate: {
-  //     isIn: [["missing", "found"]],
-  // }
-  claimed: {
-    type: DataTypes.BOOLEAN,
+  status: {
+    type: DataTypes.ENUM,
+    values: ["unclaimed", "claimed"],
     allowNull: false,
-    defaultValue: false,
+    defaultValue: "unclaimed",
   },
+  // claimed: {
+  //   type: DataTypes.BOOLEAN,
+  //   allowNull: false,
+  //   defaultValue: false,
+  // },
   claimedDate: {
     type: DataTypes.DATEONLY,
     allowNull: true,

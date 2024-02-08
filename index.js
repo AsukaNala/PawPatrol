@@ -33,8 +33,9 @@ if (process.env.NODE_ENV === "development") {
 }
 
 //Routes
-app.use("/api/users", require("./routes/userRoute"));
-app.use("/api/missing-pets", require("./routes/missingPetRoute"));
+app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/missing-pets", require("./routes/missingPetRoutes"));
+app.use("/api/found-pets", require("./routes/foundPetRoutes"));
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
