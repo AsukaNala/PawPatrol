@@ -243,7 +243,6 @@ router.get("/location/:lastSeenLocation", async (req, res, next) => {
  *         - lastSeenLocation
  *         - comment
  *         - status
- *         - foundDate
  *         - userId
  *        properties:
  *         name:
@@ -264,7 +263,7 @@ router.get("/location/:lastSeenLocation", async (req, res, next) => {
  *          example: Fremantle
  *         photo:
  *          type: string
- *          example: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Fdog%2F&psig=AOvVaw2bN6gNqjXrQj8sQjJ7X0kz&ust=1632225067353000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCJjRjZ6Fz_MCFQAAAAAdAAAAABAD
+ *          example: kitty-cat.png
  *          nullable: true
  *         comment:
  *          type: text
@@ -276,6 +275,7 @@ router.get("/location/:lastSeenLocation", async (req, res, next) => {
  *         foundDate:
  *          type: dateonly
  *          example: 2024-05-01
+ *          nullable: true
  *         userId:
  *          type: integer
  *          example: 1
@@ -304,7 +304,7 @@ router.post("/", async (req, res, next) => {
  * @swagger
  * /api/missing-pets/{id}:
  *  put:
- *    description: Use to update a  missing pet
+ *    description: Use to update a missing pet
  *    tags:
  *      - Missing Pets
  *    parameters:
@@ -328,7 +328,6 @@ router.post("/", async (req, res, next) => {
  *         - lastSeenLocation
  *         - comment
  *         - status
- *         - foundDate
  *         - userId
  *        properties:
  *         name:
@@ -349,7 +348,7 @@ router.post("/", async (req, res, next) => {
  *          example: Fremantle
  *         photo:
  *          type: string
- *          example: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Fdog%2F&psig=AOvVaw2bN6gNqjXrQj8sQjJ7X0kz&ust=1632225067353000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCJjRjZ6Fz_MCFQAAAAAdAAAAABAD
+ *          example: kitty-cat
  *          nullable: true
  *         comment:
  *          type: text
@@ -417,7 +416,6 @@ router.put("/:id", async (req, res, next) => {
  *         - lastSeenLocation
  *         - comment
  *         - status
- *         - foundDate
  *         - userId
  *        properties:
  *         name:
@@ -438,7 +436,7 @@ router.put("/:id", async (req, res, next) => {
  *          example: Fremantle
  *         photo:
  *          type: string
- *          example: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Fdog%2F&psig=AOvVaw2bN6gNqjXrQj8sQjJ7X0kz&ust=1632225067353000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCJjRjZ6Fz_MCFQAAAAAdAAAAABAD
+ *          example: kitty-cat.png
  *          nullable: true
  *         comment:
  *          type: text
