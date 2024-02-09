@@ -13,7 +13,7 @@ const FoundPetController = require("../controllers/foundPetController");
  *      '200':
  *        description: A successful response
  *      '404':
- *        description: User not found
+ *        description: Data not found
  *      '500':
  *        description: Server error
  */
@@ -45,7 +45,7 @@ router.get("/", async (req, res, next) => {
  *      '200':
  *        description: A successful response
  *      '404':
- *        description: User not found
+ *        description: Data not found
  *      '422':
  *        description: Validation error
  *      '500':
@@ -83,7 +83,7 @@ router.get("/:id", async (req, res, next) => {
  *      '200':
  *        description: A successful response
  *      '404':
- *        description: User not found
+ *        description: Data not found
  *      '422':
  *        description: Validation error
  *      '500':
@@ -120,7 +120,7 @@ router.get("/users/:id", async (req, res, next) => {
  *      '200':
  *        description: A successful response
  *      '404':
- *        description: User not found
+ *        description: Data not found
  *      '422':
  *        description: Validation error
  *      '500':
@@ -158,7 +158,7 @@ router.get("/type/:type", async (req, res, next) => {
  *      '200':
  *        description: A successful response
  *      '404':
- *        description: User not found
+ *        description: Data not found
  *      '422':
  *        description: Validation error
  *      '500':
@@ -198,7 +198,7 @@ router.get("/status/:status", async (req, res, next) => {
  *      '200':
  *        description: A successful response
  *      '404':
- *        description: User not found
+ *        description: Data not found
  *      '422':
  *        description: Validation error
  *      '500':
@@ -277,7 +277,7 @@ router.get("/location/:foundLocation", async (req, res, next) => {
  *      '400':
  *        description: Invalid JSON
  *      '404':
- *        description: User not found
+ *        description: Data not found
  *      '422':
  *        description: Validation error
  *      '500':
@@ -358,7 +358,7 @@ router.post("/", async (req, res, next) => {
  *      '400':
  *        description: Invalid JSON
  *      '404':
- *        description: User not found
+ *        description: Data not found
  *      '422':
  *        description: Validation error
  *      '500':
@@ -370,7 +370,11 @@ router.put("/:id", async (req, res, next) => {
       req.params.id,
       req.body
     );
-    res.send({ result: 200, data: data });
+    if (!data) {
+      return res.status(404).send({ result: 404, message: "Not Found" });
+    } else {
+      res.send({ result: 200, data: data });
+    }
   } catch (error) {
     next(error);
   }
@@ -442,7 +446,7 @@ router.put("/:id", async (req, res, next) => {
  *      '400':
  *        description: Invalid JSON
  *      '404':
- *        description: User not found
+ *        description: Data not found
  *      '422':
  *        description: Validation error
  *      '500':
@@ -451,7 +455,11 @@ router.put("/:id", async (req, res, next) => {
 router.delete("/:id", async (req, res, next) => {
   try {
     const data = await FoundPetController.deleteFoundPet(req.params.id);
-    res.send({ result: 200, data: data });
+    if (!data) {
+      return res.status(404).send({ result: 404, message: "Not Found" });
+    } else {
+      res.send({ result: 200, data: data });
+    }
   } catch (error) {
     next(error);
   }

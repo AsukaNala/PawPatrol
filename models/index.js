@@ -1,7 +1,7 @@
 "use strict";
 const Users = require("./user");
-const MissingPets = require("./missing_pet");
-const FoundPets = require("./found_pet");
+const MissingPets = require("./missingPet");
+const FoundPets = require("./foundPet");
 const Messages = require("./message");
 async function init() {
   // create relationships between models

@@ -1,4 +1,4 @@
-const MissingPets = require("../models/missing_pet");
+const MissingPets = require("../models/missingPet");
 const multer = require("multer");
 const path = require("path");
 
