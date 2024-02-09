@@ -1,4 +1,4 @@
-const FoundPets = require("../models/found_pet");
+const FoundPets = require("../models/foundPet");
 
 //get all found pets data
 const getFoundPets = async () => {
