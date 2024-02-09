@@ -38,6 +38,7 @@ if (process.env.NODE_ENV === "development") {
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/missing-pets", require("./routes/missingPetRoutes"));
 app.use("/api/found-pets", require("./routes/foundPetRoutes"));
+app.use("/api/messages", require("./routes/messageRoutes"));
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
