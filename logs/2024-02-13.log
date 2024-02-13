@@ -173,3 +173,24 @@
 
 2024-02-13 17:01:57:157 http: GET /api/found-pets/location/Fremantle 200 310 - 24.768 ms
 
+2024-02-13 21:32:04:324 debug: Example app listening at http://localhost:3000
+2024-02-13 21:32:16:3216 error: Not Found
+2024-02-13 21:32:16:3216 error: Not Found
+2024-02-13 21:32:16:3216 http: GET /kitty-cat.png 404 35 - 9.865 ms
+
+2024-02-13 21:32:29:3229 http: GET /api-docs/ 304 - - 5.895 ms
+
+2024-02-13 21:32:29:3229 http: GET /api-docs/swagger-ui.css 304 - - 4.442 ms
+
+2024-02-13 21:32:29:3229 http: GET /api-docs/swagger-ui-bundle.js 304 - - 5.211 ms
+
+2024-02-13 21:32:29:3229 http: GET /api-docs/swagger-ui-standalone-preset.js 304 - - 2.179 ms
+
+2024-02-13 21:32:29:3229 http: GET /api-docs/swagger-ui-init.js 304 - - 1.276 ms
+
+2024-02-13 21:32:47:3247 http: GET /api/users 200 326 - 115.006 ms
+
+2024-02-13 21:33:13:3313 http: GET /api/missing-pets/user/3 200 24 - 48.152 ms
+
+2024-02-13 21:35:57:3557 http: GET /api/missing-pets/type/cow 200 24 - 45.926 ms
+
