@@ -13,14 +13,14 @@ const getMessage = async (id) => {
 };
 
 //get message by userId
-const getMessageByUserId = async (userId) => {
-  const data = await Message.findAll({ where: { userId: userId } });
+const getMessageByUserId = async (id) => {
+  const data = await Message.findAll({ where: { userId: id } });
   return data;
 };
 
 //get message by missingPetId
-const getMessageByMissingPetId = async (missingPetId) => {
-  const data = await Message.findAll({ where: { missingPetId: missingPetId } });
+const getMessageByMissingPetId = async (id) => {
+  const data = await Message.findAll({ where: { missingPetId: id } });
   return data;
 };
 

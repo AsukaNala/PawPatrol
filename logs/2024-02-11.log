@@ -1,0 +1,102 @@
+2024-02-11 00:00:22:022 http: POST /api/missing-pets 422 109 - 18.681 ms
+
+2024-02-11 00:02:12:212 debug: Example app listening at http://localhost:3000
+2024-02-11 00:02:21:221 debug: Example app listening at http://localhost:3000
+2024-02-11 00:02:45:245 debug: Example app listening at http://localhost:3000
+2024-02-11 00:03:56:356 debug: Example app listening at http://localhost:3000
+2024-02-11 00:04:47:447 http: GET /api-docs/ 304 - - 7.642 ms
+
+2024-02-11 00:04:47:447 http: GET /api-docs/swagger-ui.css 304 - - 6.359 ms
+
+2024-02-11 00:04:47:447 http: GET /api-docs/swagger-ui-bundle.js 304 - - 5.976 ms
+
+2024-02-11 00:04:47:447 http: GET /api-docs/swagger-ui-standalone-preset.js 304 - - 9.857 ms
+
+2024-02-11 00:04:47:447 http: GET /api-docs/swagger-ui-init.js 304 - - 1.818 ms
+
+2024-02-11 00:04:48:448 http: GET /api-docs/favicon-32x32.png 304 - - 2.972 ms
+
+2024-02-11 00:04:58:458 http: GET /api/missing-pets/type/cow 422 169 - 8.927 ms
+
+2024-02-11 00:05:18:518 http: GET /api/missing-pets/status/%7Bstatus%7D 200 24 - 43.812 ms
+
+2024-02-11 00:08:13:813 debug: Example app listening at http://localhost:3000
+2024-02-11 00:08:20:820 http: GET /api-docs/ 304 - - 12.911 ms
+
+2024-02-11 00:08:20:820 http: GET /api-docs/swagger-ui.css 304 - - 7.164 ms
+
+2024-02-11 00:08:20:820 http: GET /api-docs/swagger-ui-bundle.js 304 - - 8.214 ms
+
+2024-02-11 00:08:20:820 http: GET /api-docs/swagger-ui-standalone-preset.js 304 - - 1.186 ms
+
+2024-02-11 00:08:20:820 http: GET /api-docs/swagger-ui-init.js 304 - - 3.331 ms
+
+2024-02-11 00:08:21:821 http: GET /api-docs/favicon-32x32.png 304 - - 1.321 ms
+
+2024-02-11 00:08:30:830 http: GET /api/missing-pets/status/%7Bstatus%7D 422 177 - 12.526 ms
+
+2024-02-11 00:08:47:847 http: GET /api/missing-pets/status/asds 422 177 - 4.102 ms
+
+2024-02-11 00:09:10:910 http: GET /api/missing-pets/location/holly 200 24 - 40.474 ms
+
+2024-02-11 00:10:08:108 http: GET /api/missing-pets/location/fremantle 200 878 - 33.050 ms
+
+2024-02-11 00:13:04:134 debug: Example app listening at http://localhost:3000
+2024-02-11 00:13:12:1312 http: GET /api-docs/ 304 - - 15.278 ms
+
+2024-02-11 00:13:12:1312 http: GET /api-docs/swagger-ui.css 304 - - 3.688 ms
+
+2024-02-11 00:13:12:1312 http: GET /api-docs/swagger-ui-init.js 304 - - 1.551 ms
+
+2024-02-11 00:13:12:1312 http: GET /api-docs/swagger-ui-bundle.js 304 - - 24.111 ms
+
+2024-02-11 00:13:12:1312 http: GET /api-docs/swagger-ui-standalone-preset.js 304 - - 49.066 ms
+
+2024-02-11 00:13:18:1318 http: GET /api-docs/ 304 - - 1.303 ms
+
+2024-02-11 00:13:18:1318 http: GET /api-docs/swagger-ui.css 304 - - 1.179 ms
+
+2024-02-11 00:13:18:1318 http: GET /api-docs/swagger-ui-bundle.js 304 - - 1.007 ms
+
+2024-02-11 00:13:18:1318 http: GET /api-docs/swagger-ui-standalone-preset.js 304 - - 1.161 ms
+
+2024-02-11 00:13:18:1318 http: GET /api-docs/swagger-ui-init.js 304 - - 1.162 ms
+
+2024-02-11 00:13:19:1319 http: GET /api-docs/favicon-32x32.png 304 - - 1.662 ms
+
+2024-02-11 00:13:28:1328 http: GET /api/missing-pets/location/bibralake 404 42 - 47.563 ms
+
+2024-02-11 00:14:39:1439 debug: Example app listening at http://localhost:3000
+2024-02-11 00:14:54:1454 http: GET /api/missing-pets/user/1 404 41 - 48.174 ms
+
+2024-02-11 00:15:01:151 http: GET /api/missing-pets/user/2 404 41 - 14.810 ms
+
+2024-02-11 00:15:13:1513 http: GET /api/users 200 325 - 25.669 ms
+
+2024-02-11 00:15:58:1558 debug: Example app listening at http://localhost:3000
+2024-02-11 00:16:04:164 http: GET /api-docs/ 304 - - 13.055 ms
+
+2024-02-11 00:16:04:164 http: GET /api-docs/swagger-ui.css 304 - - 5.862 ms
+
+2024-02-11 00:16:04:164 http: GET /api-docs/swagger-ui-bundle.js 304 - - 9.490 ms
+
+2024-02-11 00:16:04:164 http: GET /api-docs/swagger-ui-init.js 304 - - 1.135 ms
+
+2024-02-11 00:16:04:164 http: GET /api-docs/swagger-ui-standalone-preset.js 304 - - 8.654 ms
+
+2024-02-11 00:16:05:165 http: GET /api-docs/favicon-32x32.png 304 - - 1.134 ms
+
+2024-02-11 00:16:19:1619 http: GET /api/missing-pets/user/1 200 874 - 61.591 ms
+
+2024-02-11 00:16:32:1632 http: GET /api/missing-pets/user/9 200 24 - 28.788 ms
+
+2024-02-11 00:17:58:1758 debug: Example app listening at http://localhost:3000
+2024-02-11 00:19:48:1948 http: DELETE /api/missing-pets/9 404 41 - 35.648 ms
+
+2024-02-11 00:19:59:1959 http: DELETE /api/missing-pets/2 200 23 - 46.602 ms
+
+2024-02-11 00:20:16:2016 http: PUT /api/missing-pets/8 404 41 - 61.873 ms
+
+2024-02-11 00:20:26:2026 http: PUT /api/missing-pets/1 200 25 - 42.679 ms
+
+2024-02-11 00:52:15:5215 debug: Example app listening at http://localhost:3000

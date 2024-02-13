@@ -1,0 +1,20 @@
+2024-02-10 21:07:49:749 error: Not Found
+2024-02-10 21:07:49:749 error: Not Found
+2024-02-10 21:08:36:836 error: Cannot add or update a child row: a foreign key constraint fails (`pawpatroldb`.`MissingPets`, CONSTRAINT `MissingPets_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE)
+2024-02-10 21:33:36:3336 error: Not Found
+2024-02-10 21:33:36:3336 error: Not Found
+2024-02-10 22:34:51:3451 error: Not Found
+2024-02-10 22:34:51:3451 error: Not Found
+2024-02-10 22:37:14:3714 error: Not Found
+2024-02-10 22:37:14:3714 error: Not Found
+2024-02-10 22:46:54:4654 error: Cannot add or update a child row: a foreign key constraint fails (`pawpatroldb`.`Messages`, CONSTRAINT `Messages_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `Users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE)
+2024-02-10 23:02:30:230 error: commentController is not defined
+2024-02-10 23:05:45:545 error: commentController is not defined
+2024-02-10 23:49:08:498 error: Not Found
+2024-02-10 23:49:08:498 error: Not Found
+2024-02-10 23:50:39:5039 error: Cannot add or update a child row: a foreign key constraint fails (`pawpatroldb`.`Messages`, CONSTRAINT `Messages_ibfk_2` FOREIGN KEY (`missingPetId`) REFERENCES `MissingPets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE)
+2024-02-10 23:53:05:535 error: Unexpected token s in JSON at position 109
+2024-02-13 16:43:03:433 error: Not Found
+2024-02-13 16:43:03:433 error: Not Found
+2024-02-13 16:46:47:4647 error: Not Found
+2024-02-13 16:46:47:4647 error: Not Found

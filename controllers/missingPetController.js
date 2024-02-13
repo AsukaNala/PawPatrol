@@ -40,8 +40,8 @@ const getMissingPet = async (id) => {
 };
 
 //get missing pet by userId
-const getMissingPetByUserId = async (userId) => {
-  const data = await MissingPets.findAll({ where: { userId: userId } });
+const getMissingPetByUserId = async (id) => {
+  const data = await MissingPets.findAll({ where: { userId: id } });
   return data;
 };
 
