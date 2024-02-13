@@ -3,6 +3,14 @@ const router = express.Router();
 const MessageController = require("../controllers/messageController");
 const MissingPet = require("../models/missingPet");
 
+//import validator
+const { validationResult } = require("express-validator");
+const { idParamValidator } = require("../validators");
+const {
+  messageValidator,
+  updateMessageValidator,
+} = require("../validators/messageValidator");
+
 /**
  * @swagger
  * /api/messages:
@@ -52,13 +60,18 @@ router.get("/", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", idParamValidator, async (req, res, next) => {
   try {
-    const data = await MessageController.getMessage(req.params.id);
-    if (!data) {
-      res.status(404).send({ result: 404, message: "Message not found" });
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const data = await MessageController.getMessage(req.params.id);
+      if (!data) {
+        res.status(404).send({ result: 404, message: "Message not found" });
+      } else {
+        res.send({ result: 200, data: data });
+      }
     } else {
-      res.send({ result: 200, data: data });
+      res.status(422).send({ result: 422, errors: errors.array() });
     }
   } catch (error) {
     next(error);
@@ -67,7 +80,7 @@ router.get("/:id", async (req, res, next) => {
 
 /**
  * @swagger
- * /api/messages/users/{id}:
+ * /api/messages/user/{id}:
  *  get:
  *    description: Use to request a message by User ID
  *    tags:
@@ -90,13 +103,19 @@ router.get("/:id", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.get("/users/:id", async (req, res, next) => {
+router.get("/user/:id", idParamValidator, async (req, res, next) => {
   try {
-    const data = await MessageController.getMessageByUserId(req.params.id);
-    if (!data) {
-      res.status(404).send({ result: 404, message: "Message not found" });
+    let data;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).send({ result: 422, errors: errors.array() });
     } else {
-      res.send({ result: 200, data: data });
+      data = await MessageController.getMessageByUserId(req.params.id);
+      if (!data) {
+        res.status(404).json({ result: 404, message: "Message not found" });
+      } else {
+        res.send({ result: 200, data: data });
+      }
     }
   } catch (error) {
     next(error);
@@ -105,7 +124,7 @@ router.get("/users/:id", async (req, res, next) => {
 
 /**
  * @swagger
- * /api/messages/missing-pets/{id}:
+ * /api/messages/missing-pet/{id}:
  *  get:
  *    description: Use to request a message by MissingPet ID
  *    tags:
@@ -128,15 +147,19 @@ router.get("/users/:id", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.get("/missing-pets/:id", async (req, res, next) => {
+router.get("/missing-pet/:id", idParamValidator, async (req, res, next) => {
   try {
-    const data = await MessageController.getMessageByMissingPetId(
-      req.params.id
-    );
-    if (!data) {
-      res.status(404).send({ result: 404, message: "Message not found" });
+    let data;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).send({ result: 422, errors: errors.array() });
     } else {
-      res.send({ result: 200, data: data });
+      data = await MessageController.getMessageByMissingPetId(req.params.id);
+      if (!data) {
+        res.status(404).json({ result: 404, message: "Message not found" });
+      } else {
+        res.send({ result: 200, data: data });
+      }
     }
   } catch (error) {
     next(error);
@@ -156,11 +179,11 @@ router.get("/missing-pets/:id", async (req, res, next) => {
  *       schema:
  *        type: object
  *        required:
- *         - comment
+ *         - message
  *         - userId
  *         - missingPetId
  *        properties:
- *         comment:
+ *         message:
  *          type: text
  *          example: Hey I saw your pet!
  *         userId:
@@ -181,10 +204,19 @@ router.get("/missing-pets/:id", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.post("/", async (req, res, next) => {
+router.post("/", messageValidator, async (req, res, next) => {
   try {
-    const data = await MessageController.createMessage(req.body);
-    res.send({ result: 200, data: data });
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const data = await MessageController.createMessage(req.body);
+      if (!data) {
+        res.status(404).send({ result: 404, message: "Message not found" });
+      } else {
+        res.send({ result: 200, data: data });
+      }
+    } else {
+      res.status(422).send({ result: 422, errors: errors.array() });
+    }
   } catch (error) {
     next(error);
   }
@@ -197,17 +229,25 @@ router.post("/", async (req, res, next) => {
  *    description: Use to update a  message
  *    tags:
  *      - Messages
+ *    parameters:
+ *      - name: id
+ *        in: path
+ *        description: ID of user to fetch
+ *        required: true
+ *        type: integer
+ *        minimum: 1
+ *        example: 1
  *    requestBody:
  *     content:
  *      application/json:
  *       schema:
  *        type: object
  *        required:
- *         - comment
+ *         - message
  *         - userId
  *         - missingPetId
  *        properties:
- *         comment:
+ *         message:
  *          type: text
  *          example: Hey I saw your pet!
  *         userId:
@@ -228,13 +268,21 @@ router.post("/", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", updateMessageValidator, async (req, res, next) => {
   try {
-    const data = await MessageController.updateMessage(req.params.id, req.body);
-    if (!data) {
-      res.status(404).send({ result: 404, message: "Message not found" });
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const data = await MessageController.updateMessage(
+        req.params.id,
+        req.body
+      );
+      if (data[0] === 0) {
+        res.status(404).send({ result: 404, message: "Message not found" });
+      } else {
+        res.send({ result: 200, data: data });
+      }
     } else {
-      res.send({ result: 200, data: data });
+      res.status(422).send({ result: 422, errors: errors.array() });
     }
   } catch (error) {
     next(error);
@@ -248,17 +296,25 @@ router.put("/:id", async (req, res, next) => {
  *    description: Use to delete a  message
  *    tags:
  *      - Messages
+ *    parameters:
+ *      - name: id
+ *        in: path
+ *        description: ID of user to fetch
+ *        required: true
+ *        type: integer
+ *        minimum: 1
+ *        example: 1
  *    requestBody:
  *     content:
  *      application/json:
  *       schema:
  *        type: object
  *        required:
- *         - comment
+ *         - message
  *         - userId
  *         - missingPetId
  *        properties:
- *         comment:
+ *         message:
  *          type: text
  *          example: Hey I saw your pet!
  *         userId:
@@ -279,13 +335,18 @@ router.put("/:id", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", idParamValidator, async (req, res, next) => {
   try {
-    const data = await MessageController.deleteMessage(req.params.id);
-    if (!data) {
-      res.status(404).send({ result: 404, message: "Message not found" });
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const data = await MessageController.deleteMessage(req.params.id);
+      if (!data) {
+        res.status(404).send({ result: 404, message: "Message not found" });
+      } else {
+        res.send({ result: 200, data: data });
+      }
     } else {
-      res.send({ result: 200, data: data });
+      res.status(422).send({ result: 422, errors: errors.array() });
     }
   } catch (error) {
     next(error);

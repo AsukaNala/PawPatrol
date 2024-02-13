@@ -13,8 +13,8 @@ const getFoundPet = async (id) => {
 };
 
 //get found pet by userId
-const getFoundPetbyUserId = async (userId) => {
-  const data = await FoundPets.findAll({ where: { userId: userId } });
+const getFoundPetByUserId = async (id) => {
+  const data = await FoundPets.findAll({ where: { userId: id } });
   return data;
 };
 
@@ -57,7 +57,7 @@ const deleteFoundPet = async (id) => {
 module.exports = {
   getFoundPets,
   getFoundPet,
-  getFoundPetbyUserId,
+  getFoundPetByUserId,
   getFoundPetsByType,
   getFoundPetsByStatus,
   getFoundPetsByFoundLocation,
