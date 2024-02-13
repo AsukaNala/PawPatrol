@@ -2,6 +2,14 @@ const express = require("express");
 const router = express.Router();
 const MissingPetController = require("../controllers/missingPetController");
 
+//import validators
+const { validationResult } = require("express-validator");
+const { idParamValidator, photoValidator } = require("../validators");
+const {
+  missingPetValidator,
+  updateMissingPetValidator,
+} = require("../validators/missingPetValidator");
+
 /**
  * @swagger
  * /api/missing-pets:
@@ -51,13 +59,20 @@ router.get("/", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", idParamValidator, async (req, res, next) => {
   try {
-    const data = await MissingPetController.getMissingPet(req.params.id);
-    if (!data) {
-      return res.status(404).send({ result: 404, message: " Not found" });
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const data = await MissingPetController.getMissingPet(req.params.id);
+      if (!data) {
+        return res
+          .status(404)
+          .send({ result: 404, message: " Data Not found" });
+      } else {
+        res.send({ result: 200, data: data });
+      }
     } else {
-      res.send({ result: 200, data: data });
+      res.status(422).json({ result: 422, errors: errors.array() });
     }
   } catch (error) {
     next(error);
@@ -66,7 +81,7 @@ router.get("/:id", async (req, res, next) => {
 
 /**
  * @swagger
- * /api/missing-pets/users/{id}:
+ * /api/missing-pets/user/{id}:
  *  get:
  *    description: Use to request a missing pet by User ID
  *    tags:
@@ -89,15 +104,20 @@ router.get("/:id", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.get("/users/:id", async (req, res, next) => {
+router.get("/user/:id", idParamValidator, async (req, res, next) => {
   try {
-    const data = await MissingPetController.getMissingPetByUserId(
-      req.params.id
-    );
-    if (!data) {
-      return res.status(404).send({ result: 404, message: " Not found" });
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const data = await MissingPetController.getMissingPetByUserId(
+        req.params.id
+      );
+      if (!data) {
+        res.status(404).send({ result: 404, message: "Data not found" });
+      } else {
+        res.send({ result: 200, data: data });
+      }
     } else {
-      res.send({ result: 200, data: data });
+      res.status(422).json({ result: 422, errors: errors.array() });
     }
   } catch (error) {
     next(error);
@@ -130,13 +150,20 @@ router.get("/users/:id", async (req, res, next) => {
  */
 router.get("/type/:type", async (req, res, next) => {
   try {
-    const data = await MissingPetController.getMissingPetsByType(
-      req.params.type
-    );
-    if (!data) {
-      return res.status(404).send({ result: 404, message: " Not found" });
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const data = await MissingPetController.getMissingPetsByType(
+        req.params.type
+      );
+      if (!data) {
+        return res
+          .status(404)
+          .send({ result: 404, message: " Data Not found" });
+      } else {
+        res.send({ result: 200, data: data });
+      }
     } else {
-      res.send({ result: 200, data: data });
+      res.status(422).json({ result: 422, errors: errors.array() });
     }
   } catch (error) {
     next(error);
@@ -168,20 +195,31 @@ router.get("/type/:type", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.get("/status/:status", async (req, res, next) => {
-  try {
-    const data = await MissingPetController.getMissingPetsByStatus(
-      req.params.status
-    );
-    if (!data) {
-      return res.status(404).send({ result: 404, message: " Not found" });
-    } else {
-      res.send({ result: 200, data: data });
+router.get(
+  "/status/:status",
+
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (errors.isEmpty()) {
+        const data = await MissingPetController.getMissingPetsByStatus(
+          req.params.status
+        );
+        if (!data) {
+          return res
+            .status(404)
+            .send({ result: 404, message: " Data Not found" });
+        } else {
+          res.send({ result: 200, data: data });
+        }
+      } else {
+        res.status(422).json({ result: 422, errors: errors.array() });
+      }
+    } catch (error) {
+      next(error);
     }
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 /**
  * @swagger
@@ -214,7 +252,7 @@ router.get("/location/:lastSeenLocation", async (req, res, next) => {
       req.params.lastSeenLocation
     );
     if (!data) {
-      return res.status(404).send({ result: 404, message: " Not found" });
+      return res.status(404).send({ result: 404, message: " Data Not found" });
     } else {
       res.send({ result: 200, data: data });
     }
@@ -291,14 +329,34 @@ router.get("/location/:lastSeenLocation", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.post("/", async (req, res, next) => {
-  try {
-    const data = await MissingPetController.createMissingPet(req.body);
-    res.send({ result: 200, data: data });
-  } catch (error) {
-    next(error);
+router.post(
+  "/",
+  missingPetValidator,
+  photoValidator,
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (errors.isEmpty()) {
+        let missingPet = req.body;
+        if (req.file) {
+          missingPet.photo = req.file;
+        }
+        const data = await MissingPetController.createMissingPet(missingPet);
+        if (!data) {
+          return res
+            .status(404)
+            .send({ result: 404, message: "Data Not found" });
+        } else {
+          res.send({ result: 200, data: data });
+        }
+      } else {
+        res.status(422).json({ result: 422, errors: errors.array() });
+      }
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 /**
  * @swagger
@@ -376,21 +434,38 @@ router.post("/", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.put("/:id", async (req, res, next) => {
-  try {
-    const data = await MissingPetController.updateMissingPet(
-      req.params.id,
-      req.body
-    );
-    if (!data) {
-      return res.status(404).send({ result: 404, message: " Not found" });
-    } else {
-      res.send({ result: 200, data: data });
+router.put(
+  "/:id",
+  idParamValidator,
+  updateMissingPetValidator,
+  photoValidator,
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (errors.isEmpty()) {
+        let missingPet = req.body;
+        if (req.file) {
+          missingPet.photo = req.file;
+        }
+        const data = await MissingPetController.updateMissingPet(
+          req.params.id,
+          missingPet
+        );
+        if (data[0] === 0) {
+          return res
+            .status(404)
+            .send({ result: 404, message: "Data Not found" });
+        } else {
+          res.send({ result: 200, data: data });
+        }
+      } else {
+        res.status(422).json({ result: 422, errors: errors.array() });
+      }
+    } catch (error) {
+      next(error);
     }
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 /**
  * @swagger
@@ -468,13 +543,18 @@ router.put("/:id", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", idParamValidator, async (req, res, next) => {
   try {
-    const data = await MissingPetController.deleteMissingPet(req.params.id);
-    if (!data) {
-      return res.status(404).send({ result: 404, message: " Not found" });
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const data = await MissingPetController.deleteMissingPet(req.params.id);
+      if (data === 0) {
+        return res.status(404).send({ result: 404, message: "Data Not found" });
+      } else {
+        res.send({ result: 200, data: data });
+      }
     } else {
-      res.send({ result: 200, data: data });
+      res.status(422).json({ result: 422, errors: errors.array() });
     }
   } catch (error) {
     next(error);

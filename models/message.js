@@ -16,7 +16,7 @@ const Message = db.Sequelize.define("Message", {
     allowNull: false,
   },
 
-  comment: {
+  message: {
     type: DataTypes.TEXT,
     allowNull: false,
   },

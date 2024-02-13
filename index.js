@@ -1,9 +1,17 @@
 require("dotenv").config();
 const express = require("express");
-const { engine } = require("express-handlebars");
-const multer = require("multer");
 const cors = require("cors");
-const upload = multer({ dest: "uploads/" });
+const { engine } = require("express-handlebars");
+const {
+  handleInvalidJson,
+  handleUnauthorized,
+  handleNotFound,
+  handleAllOtherErrors,
+} = require("./errors/errorHandler");
+const morganMiddleware = require("./logging/morganMiddleware");
+const Logger = require("./logging/logger");
+//const multer = require("multer");
+//const upload = multer({ dest: "uploads/" });
 const app = express();
 const port = 3000;
 
@@ -21,9 +29,11 @@ app.get("/", (req, res) => {
 
 //Middleware
 app.use(express.json());
+app.use(morganMiddleware);
 
 //Database
 const db = require("./db");
+//create tables
 const models = require("./models/index");
 models.init();
 
@@ -40,6 +50,12 @@ app.use("/api/missing-pets", require("./routes/missingPetRoutes"));
 app.use("/api/found-pets", require("./routes/foundPetRoutes"));
 app.use("/api/messages", require("./routes/messageRoutes"));
 
+//Add error handler middleware functions to pipeline
+app.use(handleInvalidJson);
+app.use(handleUnauthorized);
+app.use(handleNotFound);
+app.use(handleAllOtherErrors);
+
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  Logger.debug(`Example app listening at http://localhost:${port}`);
 });

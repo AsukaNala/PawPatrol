@@ -2,6 +2,15 @@ const express = require("express");
 const router = express.Router();
 const FoundPetController = require("../controllers/foundPetController");
 
+//import validators
+const { validationResult } = require("express-validator");
+const { idParamValidator, photoValidator } = require("../validators");
+const {
+  foundPetValidator,
+  updateFoundPetValidator,
+} = require("../validators/foundPetValidator");
+const e = require("express");
+
 /**
  * @swagger
  * /api/found-pets:
@@ -51,13 +60,18 @@ router.get("/", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", idParamValidator, async (req, res, next) => {
   try {
-    const data = await FoundPetController.getFoundPet(req.params.id);
-    if (!data) {
-      return res.status(404).send({ result: 404, message: "Not Found" });
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const data = await FoundPetController.getFoundPet(req.params.id);
+      if (!data) {
+        return res.status(404).send({ result: 404, message: "Data Not Found" });
+      } else {
+        res.send({ result: 200, data: data });
+      }
     } else {
-      res.send({ result: 200, data: data });
+      res.status(422).json({ result: 422, errors: errors.array() });
     }
   } catch (error) {
     next(error);
@@ -66,7 +80,7 @@ router.get("/:id", async (req, res, next) => {
 
 /**
  * @swagger
- * /api/found-pets/users/{id}:
+ * /api/found-pets/user/{id}:
  *  get:
  *    description: Use to request  found pet by User ID
  *    tags:
@@ -89,13 +103,18 @@ router.get("/:id", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.get("/users/:id", async (req, res, next) => {
+router.get("/user/:id", idParamValidator, async (req, res, next) => {
   try {
-    const data = await FoundPetController.getFoundPetbyUserId(req.params.id);
-    if (!data) {
-      return res.status(404).send({ result: 404, message: "Not Found" });
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const data = await FoundPetController.getFoundPetByUserId(req.params.id);
+      if (!data) {
+        return res.status(404).send({ result: 404, message: "Data Not Found" });
+      } else {
+        res.send({ result: 200, data: data });
+      }
     } else {
-      res.send({ result: 200, data: data });
+      res.status(422).json({ result: 422, errors: errors.array() });
     }
   } catch (error) {
     next(error);
@@ -128,11 +147,16 @@ router.get("/users/:id", async (req, res, next) => {
  */
 router.get("/type/:type", async (req, res, next) => {
   try {
-    const data = await FoundPetController.getFoundPetsByType(req.params.type);
-    if (!data) {
-      return res.status(404).send({ result: 404, message: "Not Found" });
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const data = await FoundPetController.getFoundPetsByType(req.params.type);
+      if (!data) {
+        return res.status(404).send({ result: 404, message: "Data Not Found" });
+      } else {
+        res.send({ result: 200, data: data });
+      }
     } else {
-      res.send({ result: 200, data: data });
+      res.status(422).json({ result: 422, errors: errors.array() });
     }
   } catch (error) {
     next(error);
@@ -164,20 +188,31 @@ router.get("/type/:type", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.get("/status/:status", async (req, res, next) => {
-  try {
-    const data = await FoundPetController.getFoundPetsByStatus(
-      req.params.status
-    );
-    if (!data) {
-      return res.status(404).send({ result: 404, message: "Not Found" });
-    } else {
-      res.send({ result: 200, data: data });
+router.get(
+  "/status/:status",
+
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (errors.isEmpty()) {
+        const data = await FoundPetController.getFoundPetsByStatus(
+          req.params.status
+        );
+        if (!data) {
+          return res
+            .status(404)
+            .send({ result: 404, message: "Data Not Found" });
+        } else {
+          res.send({ result: 200, data: data });
+        }
+      } else {
+        res.status(422).json({ result: 422, errors: errors.array() });
+      }
+    } catch (error) {
+      next(error);
     }
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 /**
  * @swagger
@@ -210,7 +245,7 @@ router.get("/location/:foundLocation", async (req, res, next) => {
       req.params.foundLocation
     );
     if (!data) {
-      return res.status(404).send({ result: 404, message: "Not Found" });
+      return res.status(404).send({ result: 404, message: "Data Not Found" });
     } else {
       res.send({ result: 200, data: data });
     }
@@ -283,10 +318,23 @@ router.get("/location/:foundLocation", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.post("/", async (req, res, next) => {
+router.post("/", foundPetValidator, photoValidator, async (req, res, next) => {
   try {
-    const data = await FoundPetController.createFoundPet(req.body);
-    res.send({ result: 200, data: data });
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      let foundPet = req.body;
+      if (req.file) {
+        foundPet.photo = req.file;
+      }
+      const data = await FoundPetController.createFoundPet(foundPet);
+      if (!data) {
+        return res.status(404).send({ result: 404, message: "Data Not found" });
+      } else {
+        res.send({ result: 200, data: data });
+      }
+    } else {
+      res.status(422).json({ result: 422, errors: errors.array() });
+    }
   } catch (error) {
     next(error);
   }
@@ -364,21 +412,38 @@ router.post("/", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.put("/:id", async (req, res, next) => {
-  try {
-    const data = await FoundPetController.updateFoundPet(
-      req.params.id,
-      req.body
-    );
-    if (!data) {
-      return res.status(404).send({ result: 404, message: "Not Found" });
-    } else {
-      res.send({ result: 200, data: data });
+router.put(
+  "/:id",
+  idParamValidator,
+  updateFoundPetValidator,
+  photoValidator,
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (errors.isEmpty()) {
+        let foundPet = req.body;
+        if (req.file) {
+          foundPet.photo = req.file;
+        }
+        const data = await FoundPetController.updateFoundPet(
+          req.params.id,
+          foundPet
+        );
+        if (data[0] === 0) {
+          return res
+            .status(404)
+            .send({ result: 404, message: "Data Not found" });
+        } else {
+          res.send({ result: 200, data: data });
+        }
+      } else {
+        res.status(422).json({ result: 422, errors: errors.array() });
+      }
+    } catch (error) {
+      next(error);
     }
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 /**
  * @swagger
@@ -452,13 +517,18 @@ router.put("/:id", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", idParamValidator, async (req, res, next) => {
   try {
-    const data = await FoundPetController.deleteFoundPet(req.params.id);
-    if (!data) {
-      return res.status(404).send({ result: 404, message: "Not Found" });
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const data = await FoundPetController.deleteFoundPet(req.params.id);
+      if (data === 0) {
+        return res.status(404).send({ result: 404, message: "Data Not found" });
+      } else {
+        res.send({ result: 200, data: data });
+      }
     } else {
-      res.send({ result: 200, data: data });
+      res.status(422).json({ result: 422, errors: errors.array() });
     }
   } catch (error) {
     next(error);
