@@ -4,7 +4,7 @@ const userController = require("../controllers/userController");
 
 //import validators
 const { validationResult } = require("express-validator");
-const { idParamValidator } = require("../validators");
+const idParamValidator = require("../validators");
 const {
   userValidator,
   userUpdateValidator,

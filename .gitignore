@@ -2,3 +2,4 @@ node_modules
 .env
 my-sql-data
 logs
+photos/*

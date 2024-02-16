@@ -1,31 +1,4 @@
 const MissingPets = require("../models/missingPet");
-const multer = require("multer");
-const path = require("path");
-
-//set storage engine
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./uploads/missingPets");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-// upload photos
-const uploadPhoto = multer({
-  storage: storage,
-  limits: { fileSize: 1000000 },
-  fileFilter: function (req, file, cb) {
-    const fileTypes = /jpeg|jpg|png|gif/;
-    const mimeType = fileTypes.test(file.mimetype);
-    const extname = fileTypes.test(path.extname(file.originalname));
-    if (mimeType && extname) {
-      return cb(null, true);
-    }
-    cb("Error: Images only!");
-  },
-}).array("photos", 3);
 
 //get all missing pets data
 const getMissingPets = async () => {
@@ -93,5 +66,4 @@ module.exports = {
   createMissingPet,
   updateMissingPet,
   deleteMissingPet,
-  uploadPhoto,
 };

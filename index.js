@@ -27,6 +27,10 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
+//Static files
+app.use(express.static("public"));
+app.use("/photos", express.static("photos"));
+
 //Middleware
 app.use(express.json());
 app.use(morganMiddleware);

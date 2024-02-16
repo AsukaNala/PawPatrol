@@ -1,6 +1,7 @@
 "use strict";
 const Users = require("./user");
 const MissingPets = require("./missingPet");
+
 const FoundPets = require("./foundPet");
 const Messages = require("./message");
 async function init() {
@@ -17,6 +18,7 @@ async function init() {
       allowNull: false,
     },
   });
+
   Users.hasMany(FoundPets, {
     foreignKey: {
       name: "userId",

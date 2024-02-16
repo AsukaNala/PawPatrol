@@ -1,10 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const FoundPetController = require("../controllers/foundPetController");
+//import multer
+const multer = require("multer");
+const upload = multer({
+  dest: process.env.UPLOADS_DIR || "photos",
+  fileFilter: function (req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+      return cb(new Error("Only image files are allowed!"), false);
+    }
+    cb(null, true);
+  },
+});
 
 //import validators
 const { validationResult } = require("express-validator");
-const { idParamValidator, photoValidator } = require("../validators");
+const idParamValidator = require("../validators");
 const {
   foundPetValidator,
   updateFoundPetValidator,
@@ -188,31 +199,25 @@ router.get("/type/:type", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.get(
-  "/status/:status",
-
-  async (req, res, next) => {
-    try {
-      const errors = validationResult(req);
-      if (errors.isEmpty()) {
-        const data = await FoundPetController.getFoundPetsByStatus(
-          req.params.status
-        );
-        if (!data) {
-          return res
-            .status(404)
-            .send({ result: 404, message: "Data Not Found" });
-        } else {
-          res.send({ result: 200, data: data });
-        }
+router.get("/status/:status", async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const data = await FoundPetController.getFoundPetsByStatus(
+        req.params.status
+      );
+      if (!data) {
+        return res.status(404).send({ result: 404, message: "Data Not Found" });
       } else {
-        res.status(422).json({ result: 422, errors: errors.array() });
+        res.send({ result: 200, data: data });
       }
-    } catch (error) {
-      next(error);
+    } else {
+      res.status(422).json({ result: 422, errors: errors.array() });
     }
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 /**
  * @swagger
@@ -263,7 +268,7 @@ router.get("/location/:foundLocation", async (req, res, next) => {
  *      - Found Pets
  *    requestBody:
  *     content:
- *      application/json:
+ *      multipart/form-data:
  *       schema:
  *        type: object
  *        required:
@@ -290,6 +295,7 @@ router.get("/location/:foundLocation", async (req, res, next) => {
  *          example: Bibra Lake
  *         photo:
  *          type: string
+ *          format: binary
  *          example: kitty-cat.png
  *          nullable: true
  *         comment:
@@ -318,27 +324,34 @@ router.get("/location/:foundLocation", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.post("/", foundPetValidator, photoValidator, async (req, res, next) => {
-  try {
-    const errors = validationResult(req);
-    if (errors.isEmpty()) {
-      let foundPet = req.body;
-      if (req.file) {
-        foundPet.photo = req.file;
-      }
-      const data = await FoundPetController.createFoundPet(foundPet);
-      if (!data) {
-        return res.status(404).send({ result: 404, message: "Data Not found" });
+router.post(
+  "/",
+  upload.single("photo"),
+  foundPetValidator,
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (errors.isEmpty()) {
+        let foundPet = req.body;
+        if (req.file) {
+          foundPet.photo = req.file.filename;
+        }
+        const data = await FoundPetController.createFoundPet(foundPet);
+        if (!data) {
+          return res
+            .status(404)
+            .send({ result: 404, message: "Data Not found" });
+        } else {
+          res.send({ result: 200, data: data });
+        }
       } else {
-        res.send({ result: 200, data: data });
+        res.status(422).json({ result: 422, errors: errors.array() });
       }
-    } else {
-      res.status(422).json({ result: 422, errors: errors.array() });
+    } catch (error) {
+      next(error);
     }
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 /**
  * @swagger
@@ -357,7 +370,7 @@ router.post("/", foundPetValidator, photoValidator, async (req, res, next) => {
  *        example: 1
  *    requestBody:
  *     content:
- *      application/json:
+ *      multipart/form-data:
  *       schema:
  *        type: object
  *        required:
@@ -384,6 +397,7 @@ router.post("/", foundPetValidator, photoValidator, async (req, res, next) => {
  *          example: Bibra Lake
  *         photo:
  *          type: string
+ *          format: binary
  *          example: kitty-cat
  *          nullable: true
  *         comment:
@@ -414,16 +428,16 @@ router.post("/", foundPetValidator, photoValidator, async (req, res, next) => {
  */
 router.put(
   "/:id",
+  upload.single("photo"),
   idParamValidator,
   updateFoundPetValidator,
-  photoValidator,
   async (req, res, next) => {
     try {
       const errors = validationResult(req);
       if (errors.isEmpty()) {
         let foundPet = req.body;
         if (req.file) {
-          foundPet.photo = req.file;
+          foundPet.photo = req.file.filename;
         }
         const data = await FoundPetController.updateFoundPet(
           req.params.id,

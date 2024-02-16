@@ -5,7 +5,7 @@ const MissingPet = require("../models/missingPet");
 
 //import validator
 const { validationResult } = require("express-validator");
-const { idParamValidator } = require("../validators");
+const idParamValidator = require("../validators");
 const {
   messageValidator,
   updateMessageValidator,

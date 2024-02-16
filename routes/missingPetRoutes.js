@@ -2,9 +2,21 @@ const express = require("express");
 const router = express.Router();
 const MissingPetController = require("../controllers/missingPetController");
 
+//import multer
+const multer = require("multer");
+const upload = multer({
+  dest: process.env.UPLOADS_DIR || "photos",
+  fileFilter: function (req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+      return cb(new Error("Only image files are allowed!"), false);
+    }
+    cb(null, true);
+  },
+});
+
 //import validators
 const { validationResult } = require("express-validator");
-const { idParamValidator, photoValidator } = require("../validators");
+const idParamValidator = require("../validators");
 const {
   missingPetValidator,
   updateMissingPetValidator,
@@ -195,31 +207,27 @@ router.get("/type/:type", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.get(
-  "/status/:status",
-
-  async (req, res, next) => {
-    try {
-      const errors = validationResult(req);
-      if (errors.isEmpty()) {
-        const data = await MissingPetController.getMissingPetsByStatus(
-          req.params.status
-        );
-        if (!data) {
-          return res
-            .status(404)
-            .send({ result: 404, message: " Data Not found" });
-        } else {
-          res.send({ result: 200, data: data });
-        }
+router.get("/status/:status", async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      const data = await MissingPetController.getMissingPetsByStatus(
+        req.params.status
+      );
+      if (!data) {
+        return res
+          .status(404)
+          .send({ result: 404, message: " Data Not found" });
       } else {
-        res.status(422).json({ result: 422, errors: errors.array() });
+        res.send({ result: 200, data: data });
       }
-    } catch (error) {
-      next(error);
+    } else {
+      res.status(422).json({ result: 422, errors: errors.array() });
     }
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 /**
  * @swagger
@@ -270,7 +278,7 @@ router.get("/location/:lastSeenLocation", async (req, res, next) => {
  *      - Missing Pets
  *    requestBody:
  *     content:
- *      application/json:
+ *      multipart/form-data:
  *       schema:
  *        type: object
  *        required:
@@ -301,6 +309,7 @@ router.get("/location/:lastSeenLocation", async (req, res, next) => {
  *          example: Fremantle
  *         photo:
  *          type: string
+ *          format: binary
  *          example: kitty-cat.png
  *          nullable: true
  *         comment:
@@ -331,15 +340,20 @@ router.get("/location/:lastSeenLocation", async (req, res, next) => {
  */
 router.post(
   "/",
+  upload.single("photo"),
   missingPetValidator,
-  photoValidator,
   async (req, res, next) => {
     try {
       const errors = validationResult(req);
+
+      // for multiple images per record
+      // need another table to store the images - pet/missing_pet_id, image_id
+      // you can add missing pet record without pictures
+      // seperate endpoint to add pictures to missing pet record and loop through the images in route file
       if (errors.isEmpty()) {
         let missingPet = req.body;
         if (req.file) {
-          missingPet.photo = req.file;
+          missingPet.photo = req.file.filename;
         }
         const data = await MissingPetController.createMissingPet(missingPet);
         if (!data) {
@@ -375,7 +389,7 @@ router.post(
  *        example: 1
  *    requestBody:
  *     content:
- *      application/json:
+ *      multipart/form-data:
  *       schema:
  *        type: object
  *        required:
@@ -406,6 +420,7 @@ router.post(
  *          example: Fremantle
  *         photo:
  *          type: string
+ *          format: binary
  *          example: kitty-cat
  *          nullable: true
  *         comment:
@@ -436,16 +451,16 @@ router.post(
  */
 router.put(
   "/:id",
+  upload.single("photo"),
   idParamValidator,
   updateMissingPetValidator,
-  photoValidator,
   async (req, res, next) => {
     try {
       const errors = validationResult(req);
       if (errors.isEmpty()) {
         let missingPet = req.body;
         if (req.file) {
-          missingPet.photo = req.file;
+          missingPet.photo = req.file.filename;
         }
         const data = await MissingPetController.updateMissingPet(
           req.params.id,
