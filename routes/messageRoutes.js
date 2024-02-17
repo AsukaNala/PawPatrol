@@ -124,7 +124,7 @@ router.get("/user/:id", idParamValidator, async (req, res, next) => {
 
 /**
  * @swagger
- * /api/messages/missing-pet/{id}:
+ * /api/messages/missingpet/{id}:
  *  get:
  *    description: Use to request a message by MissingPet ID
  *    tags:
@@ -147,7 +147,7 @@ router.get("/user/:id", idParamValidator, async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.get("/missing-pet/:id", idParamValidator, async (req, res, next) => {
+router.get("/missingpet/:id", idParamValidator, async (req, res, next) => {
   try {
     let data;
     const errors = validationResult(req);

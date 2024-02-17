@@ -50,8 +50,8 @@ if (process.env.NODE_ENV === "development") {
 
 //Routes
 app.use("/api/users", require("./routes/userRoutes"));
-app.use("/api/missing-pets", require("./routes/missingPetRoutes"));
-app.use("/api/found-pets", require("./routes/foundPetRoutes"));
+app.use("/api/missingpets", require("./routes/missingPetRoutes"));
+app.use("/api/foundpets", require("./routes/foundPetRoutes"));
 app.use("/api/messages", require("./routes/messageRoutes"));
 
 //Add error handler middleware functions to pipeline

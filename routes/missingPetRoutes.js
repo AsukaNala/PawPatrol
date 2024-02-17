@@ -24,7 +24,7 @@ const {
 
 /**
  * @swagger
- * /api/missing-pets:
+ * /api/missingpets:
  *  get:
  *    description: Use to request all missing pets
  *    tags:
@@ -48,7 +48,7 @@ router.get("/", async (req, res, next) => {
 
 /**
  * @swagger
- * /api/missing-pets/{id}:
+ * /api/missingpets/{id}:
  *  get:
  *    description: Use to request a missing pet by ID
  *    tags:
@@ -93,7 +93,7 @@ router.get("/:id", idParamValidator, async (req, res, next) => {
 
 /**
  * @swagger
- * /api/missing-pets/user/{id}:
+ * /api/missingpets/user/{id}:
  *  get:
  *    description: Use to request a missing pet by User ID
  *    tags:
@@ -138,7 +138,7 @@ router.get("/user/:id", idParamValidator, async (req, res, next) => {
 
 /**
  * @swagger
- * /api/missing-pets/type/{type}:
+ * /api/missingpets/type/{type}:
  *  get:
  *    description: Use to request a missing pet by type
  *    tags:
@@ -184,7 +184,7 @@ router.get("/type/:type", async (req, res, next) => {
 
 /**
  * @swagger
- * /api/missing-pets/status/{status}:
+ * /api/missingpets/status/{status}:
  *  get:
  *    description: Use to request a missing pet by status
  *    tags:
@@ -231,7 +231,7 @@ router.get("/status/:status", async (req, res, next) => {
 
 /**
  * @swagger
- * /api/missing-pets/location/{lastSeenLocation}:
+ * /api/missingpets/location/{lastSeenLocation}:
  *  get:
  *    description: Use to request a missing pet by lastSeenLocation
  *    tags:
@@ -271,7 +271,7 @@ router.get("/location/:lastSeenLocation", async (req, res, next) => {
 
 /**
  * @swagger
- * /api/missing-pets:
+ * /api/missingpets:
  *  post:
  *    description: Use to create a new missing pet
  *    tags:
@@ -374,7 +374,7 @@ router.post(
 
 /**
  * @swagger
- * /api/missing-pets/{id}:
+ * /api/missingpets/{id}:
  *  put:
  *    description: Use to update a missing pet
  *    tags:
@@ -484,7 +484,7 @@ router.put(
 
 /**
  * @swagger
- * /api/missing-pets/{id}:
+ * /api/missingpets/{id}:
  *  delete:
  *    description: Use to delete a missing pet
  *    tags:

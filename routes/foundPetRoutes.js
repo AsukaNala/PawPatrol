@@ -24,7 +24,7 @@ const e = require("express");
 
 /**
  * @swagger
- * /api/found-pets:
+ * /api/foundpets:
  *  get:
  *    description: Use to request all found pets
  *    tags:
@@ -48,7 +48,7 @@ router.get("/", async (req, res, next) => {
 
 /**
  * @swagger
- * /api/found-pets/{id}:
+ * /api/foundpets/{id}:
  *  get:
  *    description: Use to request a found pet by ID
  *    tags:
@@ -91,7 +91,7 @@ router.get("/:id", idParamValidator, async (req, res, next) => {
 
 /**
  * @swagger
- * /api/found-pets/user/{id}:
+ * /api/foundpets/user/{id}:
  *  get:
  *    description: Use to request  found pet by User ID
  *    tags:
@@ -134,7 +134,7 @@ router.get("/user/:id", idParamValidator, async (req, res, next) => {
 
 /**
  * @swagger
- * /api/found-pets/type/{type}:
+ * /api/foundpets/type/{type}:
  *  get:
  *    description: Use to request found pets by type
  *    tags:
@@ -176,7 +176,7 @@ router.get("/type/:type", async (req, res, next) => {
 
 /**
  * @swagger
- * /api/found-pets/status/{status}:
+ * /api/foundpets/status/{status}:
  *  get:
  *    description: Use to request found pets by status
  *    tags:
@@ -221,7 +221,7 @@ router.get("/status/:status", async (req, res, next) => {
 
 /**
  * @swagger
- * /api/found-pets/location/{foundLocation}:
+ * /api/foundpets/location/{foundLocation}:
  *  get:
  *    description: Use to request found pets by found location
  *    tags:
@@ -261,7 +261,7 @@ router.get("/location/:foundLocation", async (req, res, next) => {
 
 /**
  * @swagger
- * /api/found-pets:
+ * /api/foundpets:
  *  post:
  *    description: Use to create a new found pet
  *    tags:
@@ -355,7 +355,7 @@ router.post(
 
 /**
  * @swagger
- * /api/found-pets/{id}:
+ * /api/foundpets/{id}:
  *  put:
  *    description: Use to update a found pet
  *    tags:
@@ -461,7 +461,7 @@ router.put(
 
 /**
  * @swagger
- * /api/found-pets/{id}:
+ * /api/foundpets/{id}:
  *  delete:
  *    description: Use to delete a found pet
  *    tags:

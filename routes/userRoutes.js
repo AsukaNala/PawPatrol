@@ -133,6 +133,53 @@ router.post("/", userValidator, emailValidator, async (req, res, next) => {
 
 /**
  * @swagger
+ * /api/users/login:
+ *  post:
+ *    description: Use to login a user
+ *    tags:
+ *      - Users
+ *    requestBody:
+ *     content:
+ *      application/json:
+ *       schema:
+ *        type: object
+ *        required:
+ *         - email
+ *         - password
+ *        properties:
+ *         email:
+ *          type: string
+ *          example: john@dudes.com
+ *         password:
+ *          type: string
+ *          example: password
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '400':
+ *        description: Invalid JSON
+ *      '404':
+ *        description: User not found
+ *      '422':
+ *        description: Validation error
+ *      '500':
+ *        description: Server error
+ */
+router.post("/login", async (req, res, next) => {
+  try {
+    const data = await userController.getUserByEmail(req.body.email);
+    if (data) {
+      res.send({ result: 200, data: data });
+    } else {
+      res.status(404).json({ result: 404, message: "User not found" });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * @swagger
  * /api/users/{id}:
  *  put:
  *    description: Use to update a user by ID

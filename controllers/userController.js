@@ -10,6 +10,11 @@ const getUser = async (id) => {
   return data;
 };
 
+const getUserByEmail = async (email) => {
+  const data = await User.findOne({ where: { email: email } });
+  return data;
+};
+
 const createUser = async (data) => {
   const user = await User.create(data);
   return user;
@@ -25,4 +30,11 @@ const deleteUser = async (id) => {
   return user;
 };
 
-module.exports = { getUsers, getUser, createUser, updateUser, deleteUser };
+module.exports = {
+  getUsers,
+  getUser,
+  getUserByEmail,
+  createUser,
+  updateUser,
+  deleteUser,
+};
