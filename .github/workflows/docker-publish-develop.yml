@@ -50,6 +50,8 @@ jobs:
             DB_SSL=${{ secrets.DB_SSL }}
             BASE_URL=${{ secrets.BASE_URL }}
             PORT=${{ secrets.PORT }}
+            UPLOADS_DIR=${{ secrets.UPLOADS_DIR }}
+            JWT_KEY=${{ secrets.JWT_KEY }}
 
       - name: Image digest
         run: echo ${{ steps.docker.outputs.digest}}

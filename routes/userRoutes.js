@@ -12,6 +12,14 @@ const {
 } = require("../validators/userValidator");
 const { error } = require("winston");
 
+//import auth middleware
+const bcrypt = require("bcryptjs");
+const saltRounds = 10;
+const jwt = require("jsonwebtoken");
+// const verifyToken = require("../auth/authMiddleware");
+
+//TODO: Add auth middleware toall routes except login and create user later
+
 /**
  * @swagger
  * /api/users:
@@ -121,7 +129,9 @@ router.post("/", userValidator, emailValidator, async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
-      const data = await userController.createUser(req.body);
+      let userData = req.body;
+      userData.password = await bcrypt.hashSync(userData.password, saltRounds);
+      const data = await userController.createUser(userData);
       res.send({ result: 200, data: data });
     } else {
       res.status(422).json({ result: 422, errors: errors.array() });
@@ -167,11 +177,22 @@ router.post("/", userValidator, emailValidator, async (req, res, next) => {
  */
 router.post("/login", async (req, res, next) => {
   try {
-    const data = await userController.getUserByEmail(req.body.email);
-    if (data) {
-      res.send({ result: 200, data: data });
+    const errors = validationResult(req);
+    const userData = await userController.getUserByEmail(req.body.email);
+    if (userData) {
+      const match = await bcrypt.compare(req.body.password, userData.password);
+      if (match) {
+        const token = jwt.sign({ id: userData.id }, process.env.JWT_KEY, {
+          expiresIn: "1h",
+        });
+
+        const payloadData = { token: token, user: userData };
+        res.send({ result: 200, data: token }); //payloadData
+      } else {
+        res.status(404).json({ errors: ["Invalid email or password"] });
+      }
     } else {
-      res.status(404).json({ result: 404, message: "User not found" });
+      res.status(404).json({ errors: errors.array() });
     }
   } catch (err) {
     next(err);
@@ -224,28 +245,30 @@ router.post("/login", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.put(
-  "/:id",
-  userUpdateValidator,
-  emailValidator,
-  async (req, res, next) => {
-    try {
-      const errors = validationResult(req);
-      if (errors.isEmpty()) {
-        const data = await userController.updateUser(req.params.id, req.body);
-        if (data[0] === 0) {
-          res.status(404).json({ result: 404, message: "User not found" });
-        } else {
-          res.send({ result: 200, data: data });
-        }
-      } else {
-        res.status(422).json({ result: 422, errors: errors.array() });
+router.put("/:id", userUpdateValidator, async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (errors.isEmpty()) {
+      let userData = req.body;
+      if (userData.password) {
+        userData.password = await bcrypt.hashSync(
+          userData.password,
+          saltRounds
+        );
       }
-    } catch (err) {
-      next(err);
+      const data = await userController.updateUser(req.params.id, userData);
+      if (data[0] === 0) {
+        res.status(404).json({ result: 404, message: "User not found" });
+      } else {
+        res.send({ result: 200, data: data });
+      }
+    } else {
+      res.status(422).json({ result: 422, errors: errors.array() });
     }
+  } catch (err) {
+    next(err);
   }
-);
+});
 
 /**
  * @swagger
