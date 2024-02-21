@@ -3,7 +3,7 @@ const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerDocument = {
   openapi: "3.0.0",
   info: {
-    title: "Paw Ptrol API",
+    title: "Paw Patrol API",
     version: "1.0.0",
     description: "Paw Patrol API for capstone project",
   },
