@@ -177,22 +177,16 @@ router.post("/", userValidator, emailValidator, async (req, res, next) => {
  */
 router.post("/login", async (req, res, next) => {
   try {
-    const errors = validationResult(req);
-    const userData = await userController.getUserByEmail(req.body.email);
-    if (userData) {
-      const match = await bcrypt.compare(req.body.password, userData.password);
-      if (match) {
-        const token = jwt.sign({ id: userData.id }, process.env.JWT_KEY, {
-          expiresIn: "1h",
-        });
-
-        const payloadData = { token: token, user: userData };
-        res.send({ result: 200, data: token }); //payloadData
-      } else {
-        res.status(404).json({ errors: ["Invalid email or password"] });
-      }
+    const user = await userController.getUserByEmail(req.body.email);
+    if (user && (await bcrypt.compare(req.body.password, user.password))) {
+      // Passwords match - create token
+      const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, {
+        expiresIn: "1h",
+      });
+      const data = { token: token, user: user };
+      res.send({ result: 200, data: data });
     } else {
-      res.status(404).json({ errors: errors.array() });
+      res.status(404).json({ result: 404, message: "User not found" });
     }
   } catch (err) {
     next(err);
