@@ -239,30 +239,35 @@ router.post("/login", async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.put("/:id", userUpdateValidator, async (req, res, next) => {
-  try {
-    const errors = validationResult(req);
-    if (errors.isEmpty()) {
-      let userData = req.body;
-      if (userData.password) {
-        userData.password = await bcrypt.hashSync(
-          userData.password,
-          saltRounds
-        );
-      }
-      const data = await userController.updateUser(req.params.id, userData);
-      if (data[0] === 0) {
-        res.status(404).json({ result: 404, message: "User not found" });
+router.put(
+  "/:id",
+  userUpdateValidator,
+  emailValidator,
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (errors.isEmpty()) {
+        let userData = req.body;
+        if (userData.password) {
+          userData.password = await bcrypt.hashSync(
+            userData.password,
+            saltRounds
+          );
+        }
+        const data = await userController.updateUser(req.params.id, userData);
+        if (data[0] === 0) {
+          res.status(404).json({ result: 404, message: "User not found" });
+        } else {
+          res.send({ result: 200, data: data });
+        }
       } else {
-        res.send({ result: 200, data: data });
+        res.status(422).json({ result: 422, errors: errors.array() });
       }
-    } else {
-      res.status(422).json({ result: 422, errors: errors.array() });
+    } catch (err) {
+      next(err);
     }
-  } catch (err) {
-    next(err);
   }
-});
+);
 
 /**
  * @swagger

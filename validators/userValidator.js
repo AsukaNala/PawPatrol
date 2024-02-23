@@ -28,11 +28,11 @@ const userUpdateValidator = [
   param("id", "User ID must be a number").isNumeric(),
   body("name").optional().not().isEmpty(),
   body("email").optional().not().isEmpty(),
-  body("password", "The password lenght must be 6-8 characters")
+  body("password", "The password lenght must be 6-120 characters")
     .optional()
     .isLength({
       min: 6,
-      max: 8,
+      max: 120,
     }),
 ];
 
