@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const MessageController = require("../controllers/messageController");
-const MissingPet = require("../models/missingPet");
+const verifyToken = require("../auth/authMiddleware");
 
 //import validator
 const { validationResult } = require("express-validator");
@@ -204,10 +204,13 @@ router.get("/missingpet/:id", idParamValidator, async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.post("/", messageValidator, async (req, res, next) => {
+router.post("/", verifyToken, messageValidator, async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
+      if (req.userId) {
+        req.body.userId = req.userId;
+      }
       const data = await MessageController.createMessage(req.body);
       if (!data) {
         res.status(404).send({ result: 404, message: "Message not found" });
@@ -268,26 +271,34 @@ router.post("/", messageValidator, async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.put("/:id", updateMessageValidator, async (req, res, next) => {
-  try {
-    const errors = validationResult(req);
-    if (errors.isEmpty()) {
-      const data = await MessageController.updateMessage(
-        req.params.id,
-        req.body
-      );
-      if (data[0] === 0) {
-        res.status(404).send({ result: 404, message: "Message not found" });
+router.put(
+  "/:id",
+  verifyToken,
+  updateMessageValidator,
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (errors.isEmpty()) {
+        if (req.userId) {
+          req.body.userId = req.userId;
+        }
+        const data = await MessageController.updateMessage(
+          req.params.id,
+          req.body
+        );
+        if (data[0] === 0) {
+          res.status(404).send({ result: 404, message: "Message not found" });
+        } else {
+          res.send({ result: 200, data: data });
+        }
       } else {
-        res.send({ result: 200, data: data });
+        res.status(422).send({ result: 422, errors: errors.array() });
       }
-    } else {
-      res.status(422).send({ result: 422, errors: errors.array() });
+    } catch (error) {
+      next(error);
     }
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 /**
  * @swagger
@@ -335,10 +346,13 @@ router.put("/:id", updateMessageValidator, async (req, res, next) => {
  *      '500':
  *        description: Server error
  */
-router.delete("/:id", idParamValidator, async (req, res, next) => {
+router.delete("/:id", verifyToken, idParamValidator, async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
+      if (req.userId) {
+        req.body.userId = req.userId;
+      }
       const data = await MessageController.deleteMessage(req.params.id);
       if (!data) {
         res.status(404).send({ result: 404, message: "Message not found" });

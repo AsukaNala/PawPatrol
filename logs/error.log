@@ -61,3 +61,10 @@
 2024-02-26 15:04:11:411 error: Not Found
 2024-02-26 20:36:24:3624 error: Not Found
 2024-02-26 20:36:24:3624 error: Not Found
+2024-02-27 21:48:59:4859 error: Not Found
+2024-02-27 21:48:59:4859 error: Not Found
+2024-02-27 21:51:22:5122 error: Unexpected token g in JSON at position 30
+2024-02-27 21:55:03:553 error: Cannot add or update a child row: a foreign key constraint fails (`pawpatroldb`.`Messages`, CONSTRAINT `Messages_ibfk_2` FOREIGN KEY (`missingPetId`) REFERENCES `MissingPets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE)
+2024-02-27 21:55:20:5520 error: Cannot add or update a child row: a foreign key constraint fails (`pawpatroldb`.`Messages`, CONSTRAINT `Messages_ibfk_2` FOREIGN KEY (`missingPetId`) REFERENCES `MissingPets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE)
+2024-02-27 21:55:57:5557 error: Cannot add or update a child row: a foreign key constraint fails (`pawpatroldb`.`Messages`, CONSTRAINT `Messages_ibfk_2` FOREIGN KEY (`missingPetId`) REFERENCES `MissingPets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE)
+2024-02-27 22:00:19:019 error: Cannot add or update a child row: a foreign key constraint fails (`pawpatroldb`.`Messages`, CONSTRAINT `Messages_ibfk_2` FOREIGN KEY (`missingPetId`) REFERENCES `MissingPets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE)

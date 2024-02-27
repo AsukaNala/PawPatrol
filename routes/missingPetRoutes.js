@@ -456,6 +456,7 @@ router.post(
  */
 router.put(
   "/:id",
+  verifyToken,
   upload.single("photo"),
   idParamValidator,
   updateMissingPetValidator,
@@ -464,6 +465,9 @@ router.put(
       const errors = validationResult(req);
       if (errors.isEmpty()) {
         let missingPet = req.body;
+        if (req.userId) {
+          missingPet.userId = req.userId;
+        }
         if (req.file) {
           missingPet.photo = req.file.filename;
         }
@@ -563,10 +567,14 @@ router.put(
  *      '500':
  *        description: Server error
  */
-router.delete("/:id", idParamValidator, async (req, res, next) => {
+router.delete("/:id", verifyToken, idParamValidator, async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
+      let missingPet = req.body;
+      if (req.userId) {
+        missingPet.userId = req.userId;
+      }
       const data = await MissingPetController.deleteMissingPet(req.params.id);
       if (data === 0) {
         return res.status(404).send({ result: 404, message: "Data Not found" });
