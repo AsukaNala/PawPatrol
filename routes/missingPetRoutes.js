@@ -364,7 +364,7 @@ router.post(
           res.send({ result: 200, data: data });
         }
       } else {
-        res.status(422).json({ result: 422, errors: errors.array() });
+        res.status(422).json({ result: 422, errors: errors.message });
       }
     } catch (error) {
       next(error);
