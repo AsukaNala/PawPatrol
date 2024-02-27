@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const MissingPetController = require("../controllers/missingPetController");
+const verifyToken = require("../auth/authMiddleware");
 
 //import multer
 const multer = require("multer");
@@ -340,6 +341,7 @@ router.get("/location/:lastSeenLocation", async (req, res, next) => {
  */
 router.post(
   "/",
+  verifyToken,
   upload.single("photo"),
   missingPetValidator,
   async (req, res, next) => {
@@ -352,6 +354,9 @@ router.post(
       // seperate endpoint to add pictures to missing pet record and loop through the images in route file
       if (errors.isEmpty()) {
         let missingPet = req.body;
+        if (req.userId) {
+          missingPet.userId = req.userId;
+        }
         if (req.file) {
           missingPet.photo = req.file.filename;
         }
@@ -364,7 +369,7 @@ router.post(
           res.send({ result: 200, data: data });
         }
       } else {
-        res.status(422).json({ result: 422, errors: errors.message });
+        res.status(422).json({ result: 422, errors: errors.array() });
       }
     } catch (error) {
       next(error);

@@ -1,8 +1,6 @@
 const { body, param } = require("express-validator");
 
 const missingPetValidator = [
-  body("userId", "User Id is required").not().isEmpty(),
-  body("userId", "User Id must be a number").isNumeric(),
   body("name", "Name is required").not().isEmpty(),
   body("type", "Type is required").not().isEmpty(),
   body("type", "Invalid type").matches(/^(dog|cat|bird|rabbit|other)$/),

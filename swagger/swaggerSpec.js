@@ -12,6 +12,20 @@ const swaggerDocument = {
       url: process.env.BASE_URL || "http://localhost:3000",
     },
   ],
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+      },
+    },
+  },
+  security: [
+    {
+      bearerAuth: [],
+    },
+  ],
   tags: [
     {
       name: "Paw Patrol",
