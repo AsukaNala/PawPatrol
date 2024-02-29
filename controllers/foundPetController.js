@@ -2,7 +2,7 @@ const FoundPets = require("../models/foundPet");
 
 //get all found pets data
 const getFoundPets = async () => {
-  const data = await FoundPets.findAll({ order: [["id", "DESC"]] });
+  const data = await FoundPets.findAll({ order: [["updatedAt", "DESC"]] });
   return data;
 };
 
